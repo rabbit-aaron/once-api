@@ -1,8 +1,8 @@
 import express from "express"
 import bodyParser from "body-parser";
 
-const getUri = (view, method, prefix) => {
-    return `${prefix}${slugify(view.name)}/${slugify(method)}`;
+const getUri = (view, method) => {
+    return `/${slugify(view.name)}/${slugify(method)}`;
 };
 
 const LETTER_REGEX = /([A-Z])/g;
@@ -18,18 +18,10 @@ const slugify = (str) => {
     });
 };
 
-const getViewClassMethods = viewClass => {
-    return Object.getOwnPropertyNames(viewClass.prototype).filter(name => {
-        if (typeof viewClass.prototype[name] === "function" && name !== "constructor") {
-            return true;
-        }
-        return false;
-    });
-};
+const getViewClassMethods = viewClass => Object.getOwnPropertyNames(viewClass.prototype).filter(name => typeof viewClass.prototype[name] === "function" && name !== "constructor");
 
 export default class OnceAPI {
-    constructor(views, prefix = "", mappingsURI = "__mappings__") {
-        prefix += "/";
+    constructor(views, prefix = "", mappingsURI = "/__mappings__") {
         let app = express();
         app.use(bodyParser.json());
         let uriRegistered = {};
@@ -37,18 +29,19 @@ export default class OnceAPI {
         views.forEach(view => {
             mappings[view.name] = {};
             getViewClassMethods(view).forEach(method => {
-                let uri = getUri(view, method, prefix);
+                let uri = getUri(view, method);
                 if (uriRegistered[uri]) {
                     throw `URI conflict detected for ${view.name}.${method} and ${uriRegistered[uri]}: ${uri}`;
                 }
                 uriRegistered[uri] = `${view.name}.${method}`;
-                mappings[view.name][method] = uri;
+                mappings[view.name][method] = `${prefix}${uri}`;
                 app.post(uri, (req, res, next) => {
                     let v = new view(req, res, next);
                     v[method].apply(v, req.body);
                 });
             });
         });
+        
         let defaultProps = {
             writable: false,
             enumerable: false,
