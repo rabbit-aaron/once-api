@@ -1,0 +1,16 @@
+{
+    "indent": {
+        "value": "    "
+    },
+    "lineBreak": {
+        "before": {
+            "FunctionDeclaration": ">=1",
+            "FunctionDeclarationOpeningBrace": 0,
+            "FunctionDeclarationClosingBrace": 1
+        },
+        "after": {
+            "FunctionDeclaration": ">=1",
+            "FunctionDeclarationOpeningBrace": 1
+        }
+    }
+}
