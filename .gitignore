@@ -1,3 +1,5 @@
-/dist
 /node_modules
+/frontend
+/backend
+.DS_Store
 npm-debug.log

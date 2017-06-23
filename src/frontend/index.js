@@ -53,3 +53,4 @@ const OnceAPI = (mappingsURI = "/__mappings__") => {
 
 
 export default OnceAPI;
+export OnceAPI;
