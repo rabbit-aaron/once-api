@@ -12,7 +12,7 @@ To start with, you need to implement a view class extending View
 // MyView.js
 import View from "once-api/backend/view";
 
-export default class MyView { //this class will be instanciated on each request
+export default class MyView extends View { //this class will be instanciated on each request
     greet(name){
         this.res.json(`Hello, ${name}!`); // this will be the resolved value in frontend
         // you can also access the req / next object using this.req / this.next
@@ -45,4 +45,4 @@ OnceAPI().ready.then(classes => {
 
 ```
 
-After that, run your backend code using babel-node and compile your frontend.js, you should see "Hello, Aaron!" pop up in your browser.
+After that, run your backend code using babel-node and transpile your frontend.js, you should see "Hello, Aaron!" pop up in your browser.
